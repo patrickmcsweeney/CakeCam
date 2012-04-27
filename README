@@ -1,0 +1,3 @@
+To set up for development with eclipse type:
+
+mvn eclipse:eclipse
