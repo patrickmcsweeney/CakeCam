@@ -57,7 +57,7 @@ public class CakeCam {
         	
 			@Override
 			public void beforeUpdate(MBFImage frame) {
-				
+				// sausages and beans in here
 				DisplayUtilities.displayName(frame, "CakeCam");
 				if(frameCount<200){
 					frameCount++;
