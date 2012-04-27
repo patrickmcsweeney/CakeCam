@@ -46,7 +46,7 @@ public class CakeCam {
 		try {
 			vc = new VideoCapture(640,480);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch block	
 			e.printStackTrace();
 		}
         VideoDisplay<MBFImage> vd = VideoDisplay.createOffscreenVideoDisplay(vc);
@@ -57,7 +57,7 @@ public class CakeCam {
         	
 			@Override
 			public void beforeUpdate(MBFImage frame) {
-				// sausages and beans in here
+
 				DisplayUtilities.displayName(frame, "CakeCam");
 				if(frameCount<200){
 					frameCount++;
