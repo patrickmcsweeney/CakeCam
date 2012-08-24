@@ -134,6 +134,17 @@
 			<url>http://maven.openimaj.org/</url>
 		</repository>
 		<repository>
+			<id>openimaj-releases</id>
+			<name>OpenIMAJ Maven Releases Repository</name>
+			<url>http://maven.ecs.soton.ac.uk/content/repositories/openimaj-releases/</url>
+		</repository>
+		<repository>
+			<id>openimaj-snapshots</id>
+			<name>OpenIMAJ Maven Snapshots Repository</name>
+			<url>http://maven.ecs.soton.ac.uk/content/repositories/openimaj-snapshots/</url>
+			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+		<!-- <repository>
 			<id>Octopussy thirdparty maven repository</id>
 			<url>http://octopussy.ecs.soton.ac.uk/m2/thirdparty/</url>
 		</repository>
@@ -141,7 +152,7 @@
 			<id>Octopussy snapshot maven repository</id>
 			<url>http://octopussy.ecs.soton.ac.uk/m2/snapshots</url>
 			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
+		</repository> -->
 	</repositories>
 	
 	<build>
