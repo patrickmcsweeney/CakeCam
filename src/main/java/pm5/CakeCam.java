@@ -74,10 +74,10 @@ public class CakeCam {
 			      try{
 			         MimeMessage message = new MimeMessage(session);
 
-			         message.setFrom(new InternetAddress("pm5@ecs.soton.ac.uk", "CakeCam"));
+			         message.setFrom(new InternetAddress("tb12g09@ecs.soton.ac.uk", "CakeCam"));
 			         
 			         message.addRecipient(Message.RecipientType.TO,
-			                                  new InternetAddress("pm5@ecs.soton.ac.uk"));
+			                                  new InternetAddress("tb12g09@ecs.soton.ac.uk"));
 
 			         message.setSubject("[CakeCam] - Cake in Building 32 coffee room");
 
