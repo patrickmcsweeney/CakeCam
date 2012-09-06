@@ -1,6 +1,7 @@
 package pm5;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
@@ -25,6 +26,16 @@ import org.openimaj.image.MBFImage;
 import org.openimaj.video.VideoDisplay;
 import org.openimaj.video.VideoDisplayListener;
 import org.openimaj.video.capture.VideoCapture;
+
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.multi.qrcode.QRCodeMultiReader;
+import com.google.zxing.Result;
 
 public class CakeCam 
 {
@@ -70,6 +81,46 @@ public class CakeCam
                     e.printStackTrace();
                 }
                 
+                //Create noun/adjective/date strings
+                String food = "cake (or other food)";
+                
+                //Convert File to zxing readable format
+                BufferedImageLuminanceSource lumSource;
+                try 
+                {
+                    lumSource = new BufferedImageLuminanceSource(ImageIO.read(new FileImageInputStream(file)));
+                    BinaryBitmap image = new BinaryBitmap(new HybridBinarizer(lumSource));
+                    
+                    //Create QR code reader, decode available barcodes
+                    QRCodeMultiReader reader = new QRCodeMultiReader();
+                    Result[] results;
+                    try 
+                    {
+                        results = reader.decodeMultiple(image);
+                        
+                        //TODO: This if statement will be removed before deployment
+                        if(results.length != 1)
+                        {
+                            food = results[0].getText();
+                        }
+                    } 
+                    catch (NotFoundException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+                catch (FileNotFoundException e1)
+                {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                catch (IOException e1)
+                {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+
                 Properties properties = System.getProperties();
 
                 // Setup mail server
@@ -86,12 +137,12 @@ public class CakeCam
                      
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress("tb12g09@ecs.soton.ac.uk"));
 
-                    message.setSubject("[CakeCam] - Cake in Building 32 coffee room");
+                    message.setSubject("[CakeCam] - "+food+" in Building 32 coffee room");
 
                     BodyPart messageBodyPart = new MimeBodyPart();
 
                     // Fill the message
-                    messageBodyPart.setText("This cake! or food can be found in the building 32 coffee room.");
+                    messageBodyPart.setText("This "+food+" can be found in the building 32 coffee room.");
 
                     Multipart multipart = new MimeMultipart();
                     multipart.addBodyPart(messageBodyPart);
