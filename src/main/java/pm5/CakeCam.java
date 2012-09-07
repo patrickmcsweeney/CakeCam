@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -29,7 +32,6 @@ import org.openimaj.video.capture.VideoCapture;
 
 import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.BinaryBitmap;
@@ -81,6 +83,11 @@ public class CakeCam
                     e.printStackTrace();
                 }
                 
+                //Define allowed QR codes
+                final Set<String> FOOD = new HashSet<String>(Arrays.asList(
+                        new String[] {"cake", "pizza", "tray of sandwiches"}
+                   ));
+
                 //Create noun/adjective/date strings
                 String food = "cake (or other food)";
                 
@@ -99,7 +106,7 @@ public class CakeCam
                         results = reader.decodeMultiple(image);
                         
                         //TODO: This if statement will be removed before deployment
-                        if(results.length != 1)
+                        if(results.length != 1 && FOOD.contains(results[0].getText()))
                         {
                             food = results[0].getText();
                         }
