@@ -106,7 +106,7 @@ public class CakeCam
                         results = reader.decodeMultiple(image);
                         
                         //TODO: This if statement will be removed before deployment
-                        if(results.length != 1 && FOOD.contains(results[0].getText()))
+                        if(results.length == 1 && FOOD.contains(results[0].getText()))
                         {
                             food = results[0].getText();
                         }
