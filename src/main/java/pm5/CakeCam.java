@@ -101,20 +101,13 @@ public class CakeCam
                     //Create QR code reader, decode available barcodes
                     QRCodeMultiReader reader = new QRCodeMultiReader();
                     Result[] results;
-                    try 
+
+                    results = reader.decodeMultiple(image);
+                    
+                    //TODO: This if statement will be removed before deployment
+                    if(results.length == 1 && FOOD.contains(results[0].getText()))
                     {
-                        results = reader.decodeMultiple(image);
-                        
-                        //TODO: This if statement will be removed before deployment
-                        if(results.length == 1 && FOOD.contains(results[0].getText()))
-                        {
-                            food = results[0].getText();
-                        }
-                    } 
-                    catch (NotFoundException e1)
-                    {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
+                        food = results[0].getText();
                     }
                 }
                 catch (FileNotFoundException e1)
@@ -123,6 +116,11 @@ public class CakeCam
                     e1.printStackTrace();
                 }
                 catch (IOException e1)
+                {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                catch (NotFoundException e1)
                 {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
