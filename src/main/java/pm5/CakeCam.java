@@ -6,11 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -28,6 +25,7 @@ import javax.mail.internet.MimeMultipart;
 import org.openimaj.image.DisplayUtilities;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.image.MBFImage;
+import org.openimaj.image.colour.ColourSpace;
 import org.openimaj.video.VideoDisplay;
 import org.openimaj.video.VideoDisplayListener;
 import org.openimaj.video.capture.VideoCapture;
@@ -62,12 +60,13 @@ public class CakeCam
         
         VideoDisplayListener<MBFImage> listener = new VideoDisplayListener<MBFImage>() 
         {
-            String fileName = PATH+"cake.png";
+            String fileName = PATH+"cake.jpg";
             int frameCount = 0;
             
             @Override
             public void beforeUpdate(MBFImage frame)
             {
+                frame = ColourSpace.RGB.convertFromRGB(frame);
                 DisplayUtilities.displayName(frame, "CakeCam");
                 
                 if(frameCount<200)
@@ -79,7 +78,7 @@ public class CakeCam
                 File file = new File(fileName);
                 try
                 {
-                    ImageUtilities.write(frame, file);
+                    ImageIO.write(ImageUtilities.createBufferedImageForDisplay(frame), "jpg", file);
                 }
                 catch (IOException e)
                 {
@@ -142,7 +141,7 @@ public class CakeCam
                 {
                     System.err.println("No QR codes found: "+e1.getMessage());
                     //e1.printStackTrace();
-                }
+                } 
 
                 Properties properties = System.getProperties();
 
