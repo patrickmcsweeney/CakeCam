@@ -1,7 +1,9 @@
 package pm5;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -42,7 +44,9 @@ import com.google.zxing.Result;
 public class CakeCam 
 {
     public static void main(String[] args) 
-    { 
+    {
+        //Testing on windows
+        final String PATH = "C:/Users/Tom/AppData/Local/Temp/CakeCam/"; //"/tmp/CakeCam/";
         VideoCapture vc = null;
         try 
         {
@@ -58,7 +62,7 @@ public class CakeCam
         
         VideoDisplayListener<MBFImage> listener = new VideoDisplayListener<MBFImage>() 
         {
-            String fileName = "/tmp/cake.png";
+            String fileName = PATH+"cake.png";
             int frameCount = 0;
             
             @Override
@@ -84,9 +88,23 @@ public class CakeCam
                 }
                 
                 //Define allowed QR codes
-                final Set<String> FOOD = new HashSet<String>(Arrays.asList(
-                        new String[] {"cake", "pizza", "tray of sandwiches"}
-                   ));
+                HashSet<String> FOOD = new HashSet<String>();
+                BufferedReader filereader;
+                try {
+                    filereader = new BufferedReader(new FileReader(PATH+"cakecamcodes.txt"));
+                
+                    while(filereader.ready())
+                    {
+                        FOOD.add(filereader.readLine().toLowerCase());
+                    }
+                }
+                catch (FileNotFoundException e2) 
+                {
+                    e2.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 
                 //Create noun/adjective/date strings
                 String food = "cake (or other food)";
@@ -105,25 +123,25 @@ public class CakeCam
                     results = reader.decodeMultiple(image);
                     
                     //TODO: This if statement will be removed before deployment
-                    if(results.length == 1 && FOOD.contains(results[0].getText()))
+                    if(results.length == 1 && FOOD.contains(results[0].getText().toLowerCase()))
                     {
-                        food = results[0].getText();
+                        food = results[0].getText().toLowerCase();
                     }
                 }
                 catch (FileNotFoundException e1)
                 {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    System.err.println("File not found: "+e1.getMessage());
+                    //e1.printStackTrace();
                 }
                 catch (IOException e1)
                 {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    System.err.println("IO error: "+e1.getMessage());
+                    //e1.printStackTrace();
                 }
                 catch (NotFoundException e1)
                 {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    System.err.println("No QR codes found: "+e1.getMessage());
+                    //e1.printStackTrace();
                 }
 
                 Properties properties = System.getProperties();
