@@ -121,10 +121,32 @@ public class CakeCam
 
                     results = reader.decodeMultiple(image);
                     
-                    //TODO: This if statement will be removed before deployment
-                    if(results.length == 1 && FOOD.contains(results[0].getText().toLowerCase()))
+                    int count = 0;
+                    food = "";
+                    boolean accepted = false;
+                    
+                    for(Result result : results)
                     {
-                        food = results[0].getText().toLowerCase();
+                        if(FOOD.contains(result.getText().toLowerCase()))
+                        {
+                            food += result.getText().toLowerCase();
+                            accepted = true;
+                        }
+                        
+                        if(count == results.length - 2)
+                        {
+                            food += " and ";
+                        }
+                        else if(count < results.length -1)
+                        {
+                            food += ", ";
+                        }
+                        
+                        count++;
+                    }
+                    if(!accepted)
+                    {
+                        food = "cake (or other food)";
                     }
                 }
                 catch (FileNotFoundException e1)
