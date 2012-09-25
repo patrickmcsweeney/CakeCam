@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
+import java.util.Date;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -44,26 +45,11 @@ public class CakeCam {
         
         VideoDisplayListener<MBFImage> listener = new VideoDisplayListener<MBFImage>() {
         	String fileName = "/tmp/cake.png";
+        	long GAP_MINUTES = 30;
         	int frameCount = 0;
         	
-			@Override
-			public void beforeUpdate(MBFImage frame) {
-
-				DisplayUtilities.displayName(frame, "CakeCam");
-				if(frameCount<200){
-					frameCount++;
-					return;
-				}
-				
-				File file = new File(fileName);
-				try {
-					ImageUtilities.write(frame, file);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				 Properties properties = System.getProperties();
+        	private void sendMail() {
+        		Properties properties = System.getProperties();
 
 			      // Setup mail server
 			      properties.setProperty("mail.smtp.host", "smtp.ecs.soton.ac.uk");
@@ -108,7 +94,38 @@ public class CakeCam {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+        	}
+
+			@Override
+			public void beforeUpdate(MBFImage frame) {
+
+				DisplayUtilities.displayName(frame, "CakeCam");
+				if(frameCount<200){
+					frameCount++;
+					return;
+				}
 				
+				File file = new File(fileName);
+
+				// Has enough time expired?
+				if(file.exists()) {
+					long modifiedTime = file.lastModified();
+					long now = new Date().getTime();
+					long diff = (now - modifiedTime) / 1000 / 60;
+					if(diff < GAP_MINUTES) {
+						System.exit(0);
+					}
+				}
+
+				try {
+					ImageUtilities.write(frame, file);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				 
+				sendMail();
 				System.exit(0);
 				
 			}
