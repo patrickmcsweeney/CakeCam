@@ -44,7 +44,7 @@ public class CakeCam
     public static void main(String[] args) 
     {
         //Testing on windows
-        final String PATH = "C:/Users/Tom/AppData/Local/Temp/CakeCam/"; //"/tmp/CakeCam/";
+        final String PATH = System.getProperty("java.io.tmpdir")+"CakeCam/";
         VideoCapture vc = null;
         try 
         {
