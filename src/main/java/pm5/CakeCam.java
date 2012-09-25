@@ -94,7 +94,11 @@ public class CakeCam
                 
                     while(filereader.ready())
                     {
-                        FOOD.add(filereader.readLine().toLowerCase());
+                        String line = filereader.readLine().toLowerCase();
+                        if(!line.startsWith("#"))
+                        {
+                            FOOD.add(line);
+                        }
                     }
                 }
                 catch (FileNotFoundException e2) 
