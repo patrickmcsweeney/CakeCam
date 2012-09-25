@@ -52,8 +52,8 @@ public class CakeCam
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block    
-            e.printStackTrace();
+            System.err.println("IO error: "+e.getMessage());
+            //e.printStackTrace();
         }
         
         VideoDisplay<MBFImage> vd = VideoDisplay.createOffscreenVideoDisplay(vc);
@@ -82,8 +82,8 @@ public class CakeCam
                 }
                 catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    System.err.println("IO error: "+e.getMessage());
+                    //e.printStackTrace();
                 }
                 
                 //Define allowed QR codes
@@ -103,13 +103,16 @@ public class CakeCam
                 }
                 catch (FileNotFoundException e2) 
                 {
-                    e2.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    System.err.println("File not found: "+e2.getMessage());
+                    //e2.printStackTrace();
+                }
+                catch (IOException e)
+                {
+                    System.err.println("IO error: "+e.getMessage());
+                    //e.printStackTrace();
                 }
 
-                //Create noun/adjective/date strings
+                //Create default subject
                 String food = "cake (or other food)";
                 
                 //Convert File to zxing readable format
@@ -148,6 +151,7 @@ public class CakeCam
                         
                         count++;
                     }
+                    //Revert to default subject if no acceptable codes were found
                     if(!accepted)
                     {
                         food = "cake (or other food)";
@@ -215,7 +219,7 @@ public class CakeCam
                 }
                 catch (UnsupportedEncodingException e)
                 {
-                    // TODO Auto-generated catch block
+                    System.err.println("Encoding error: "+e.getMessage());
                     e.printStackTrace();
                 }
                 
